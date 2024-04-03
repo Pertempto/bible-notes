@@ -21,6 +21,13 @@
                 "command": "bible-notes.insert-verse",
                 "title": "Insert Verse"
             }
+        ],
+        "keybindings": [
+            {
+                "command": "bible-notes.insert-reference",
+                "key": "ctrl+shift+l",
+                "when": "editorTextFocus"
+            }
         ]
     },
     "scripts": {
