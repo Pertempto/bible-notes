@@ -25,7 +25,7 @@
         "keybindings": [
             {
                 "command": "bible-notes.insert-reference",
-                "key": "ctrl+shift+l",
+                "key": "ctrl+i",
                 "when": "editorTextFocus"
             }
         ]
