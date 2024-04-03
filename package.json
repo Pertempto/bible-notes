@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "bible-notes.helloWorld",
-        "title": "Hello World"
+        "command": "bible-notes.insert-verse",
+        "title": "Insert Verse"
       }
     ]
   },
