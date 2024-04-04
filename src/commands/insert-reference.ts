@@ -1,22 +1,33 @@
-import { window, ExtensionContext } from "vscode";
+import { ExtensionContext, window } from "vscode";
+import { translate } from "../verse-utils/translate";
+import {
+    bookName,
+    generateReference,
+    parseReference,
+    parseVerseId,
+} from "../verse-utils/verse-utils";
 
 export async function insertReference(context: ExtensionContext) {
-    const reference = await window.showInputBox({
+    const raw = await window.showInputBox({
         value: "John 1:1",
         valueSelection: [0, 10],
         placeHolder: "Verse reference",
         validateInput: (text: string) => {
-            // TODO: check that the text is a valid reference
-            // window.showInformationMessage(`Validating: ${text}`);
-            return null;
+            const reference = parseReference(text, translate);
+            window.showInformationMessage(`REF: ${reference}`);
+            return reference === null ? "Invalid reference" : null;
         },
     });
 
-    if (reference === undefined) {
+    if (raw === undefined) {
         return;
     }
 
-    const chapter = reference.split(":")[0];
+    const verseId = parseReference(raw, translate)!;
+    const verseInfo = parseVerseId(verseId);
+    const chapter =
+        bookName(verseInfo.bookId, translate).toLowerCase() + "/" + verseInfo.chapterNumber;
+    const reference = generateReference(verseInfo, translate);
 
     const editor = window.activeTextEditor;
     if (editor !== undefined) {
