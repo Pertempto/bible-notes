@@ -25,10 +25,20 @@
         "keybindings": [
             {
                 "command": "bible-notes.insert-reference",
-                "key": "ctrl+k",
+                "key": "ctrl+k r",
                 "when": "editorTextFocus"
             }
-        ]
+        ],
+        "customEditors": [
+            {
+              "viewType": "bible-notes.sequence",
+              "displayName": "Sequence of Events",
+              "selector": [
+                {
+                  "filenamePattern": "*.sequence"
+                }
+              ]
+            }]
     },
     "scripts": {
         "vscode:prepublish": "npm run package",

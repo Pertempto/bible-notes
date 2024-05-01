@@ -4,6 +4,7 @@ import {
     bookName,
     generateReference,
     parseReference,
+    parseReferenceRange,
     parseVerseId,
 } from "../verse-utils/verse-utils";
 
@@ -13,9 +14,8 @@ export async function insertReference(context: ExtensionContext) {
         valueSelection: [0, 10],
         placeHolder: "Verse reference",
         validateInput: (text: string) => {
-            const reference = parseReference(text, translate);
-            window.showInformationMessage(`REF: ${reference}`);
-            return reference === null ? "Invalid reference" : null;
+            const verseIds = parseReferenceRange(text, translate);
+            return verseIds.length === 0 ? "Invalid reference" : null;
         },
     });
 
@@ -23,11 +23,21 @@ export async function insertReference(context: ExtensionContext) {
         return;
     }
 
-    const verseId = parseReference(raw, translate)!;
-    const verseInfo = parseVerseId(verseId);
+    const verseIds = parseReferenceRange(raw, translate)!;
+    if (verseIds.length === 0) {
+        window.showErrorMessage(`Invalid reference: ${raw}`);
+        return;
+    }
+    const verseInfo = parseVerseId(verseIds[0]);
     const chapter =
-        bookName(verseInfo.bookId, translate).toLowerCase() + "/" + verseInfo.chapterNumber;
-    const reference = generateReference(verseInfo, translate);
+        bookName(verseInfo.bookId, translate).toLowerCase() +
+        "/" +
+        verseInfo.chapterNumber;
+    let suffix =
+        verseIds.length === 1
+            ? ""
+            : `-${parseVerseId(verseIds[verseIds.length - 1]).verseNumber}`;
+    const reference = generateReference(verseInfo, translate) + suffix;
 
     const editor = window.activeTextEditor;
     if (editor !== undefined) {

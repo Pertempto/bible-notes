@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { insertReference } from "./commands/insert-reference";
 import { insertVerse } from "./commands/insert-verse";
+import { SequenceEditorProvider } from './editors/sequence-editor';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -17,6 +18,8 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.commands.registerCommand(commandId, () => handler(context))
         );
     }
+
+    SequenceEditorProvider.register(context);
 }
 
 // This method is called when your extension is deactivated
