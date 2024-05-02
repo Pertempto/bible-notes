@@ -30,17 +30,22 @@ export class SequenceEditorProvider implements CustomTextEditorProvider {
         webviewPanel: WebviewPanel,
         _token: CancellationToken
     ): Promise<void> {
-        const cssURI = webviewPanel.webview.asWebviewUri(
-            Uri.file(path.join(this.context.extensionPath, "css", "style.css"))
+        const fs = workspace.fs;
+        const pathToHtml = Uri.file(
+            path.join(
+                this.context.extensionPath,
+                "editor-content",
+                "sequence",
+                "main.html"
+            )
         );
-        const jsURI = webviewPanel.webview.asWebviewUri(
-            Uri.file(path.join(this.context.extensionPath, "js", "main.js"))
-        );
-        console.log(jsURI);
-        window.showInformationMessage(this.context.extensionPath);
 
         webviewPanel.webview.options = { enableScripts: true };
-        webviewPanel.webview.html = getWebviewContent(cssURI, jsURI);
+
+        fs.readFile(pathToHtml).then((data) => {
+            webviewPanel.webview.html = data.toString();
+        });
+
 
         const updateContent = (content: string) =>
             webviewPanel.webview.postMessage({
@@ -54,7 +59,7 @@ export class SequenceEditorProvider implements CustomTextEditorProvider {
             console.log("MESSAGE:", message);
             switch (message.type) {
                 case "test":
-                    // TODO: something
+                    updateContent('You pressed test')
                     break;
             }
         });
@@ -66,22 +71,4 @@ export class SequenceEditorProvider implements CustomTextEditorProvider {
             updateContent(event.document.getText());
         });
     }
-}
-
-function getWebviewContent(cssURI: Uri, jsURI: Uri) {
-    return `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='${cssURI.toString()}' />
-    <title>Example Webview</title>
-  </head>
-  <body>
-    <h1>This works!</h1>
-    <pre id="content">CONTENT</pre>
-    <button id="test">Test</button>
-    <script src='${jsURI.toString()}'></script>
-  </body>
-</html>`;
 }
