@@ -12,11 +12,11 @@
         <h1>This works!</h1>
         <pre id="content">CONTENT</pre>
         <button id="test">Test</button>
+        <button id="listFiles">List Files</button>
         <script>
             const vscode = acquireVsCodeApi();
 
             const content = document.getElementById("content");
-
 
             // Handle the message inside the webview
             window.addEventListener("message", (event) => {
@@ -26,12 +26,17 @@
                     case "contentChanged":
                         content.textContent = message.content;
                         break;
+                    case "uris":
+                        content.textContent = message.uris;
+                        break;
                 }
             });
 
             document.getElementById("test").onclick = () => {
-                // TODO: figure out how to get this to work
                 vscode.postMessage({ type: "test" });
+            };
+            document.getElementById("listFiles").onclick = () => {
+                vscode.postMessage({ type: "listFiles" });
             };
         </script>
     </body>

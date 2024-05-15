@@ -46,7 +46,6 @@ export class SequenceEditorProvider implements CustomTextEditorProvider {
             webviewPanel.webview.html = data.toString();
         });
 
-
         const updateContent = (content: string) =>
             webviewPanel.webview.postMessage({
                 command: "contentChanged",
@@ -59,7 +58,16 @@ export class SequenceEditorProvider implements CustomTextEditorProvider {
             console.log("MESSAGE:", message);
             switch (message.type) {
                 case "test":
-                    updateContent('You pressed test')
+                    updateContent("You pressed test");
+                    break;
+                case "listFiles":
+                    const uris = workspace.textDocuments.map((t) =>
+                        t.uri.toString()
+                    );
+                    webviewPanel.webview.postMessage({
+                        command: "uris",
+                        uris,
+                    });
                     break;
             }
         });
