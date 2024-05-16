@@ -12,6 +12,7 @@
     "activationEvents": [],
     "main": "./dist/extension.js",
     "contributes": {
+        "markdown.markdownItPlugins": true,
         "commands": [
             {
                 "command": "bible-notes.insert-reference",
@@ -31,14 +32,15 @@
         ],
         "customEditors": [
             {
-              "viewType": "bible-notes.sequence",
-              "displayName": "Sequence of Events",
-              "selector": [
-                {
-                  "filenamePattern": "*.sequence"
-                }
-              ]
-            }]
+                "viewType": "bible-notes.sequence",
+                "displayName": "Sequence of Events",
+                "selector": [
+                    {
+                        "filenamePattern": "*.sequence"
+                    }
+                ]
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run package",
@@ -52,6 +54,7 @@
         "test": "vscode-test"
     },
     "devDependencies": {
+        "@types/markdown-it-container": "^2.0.10",
         "@types/mocha": "^10.0.6",
         "@types/node": "18.x",
         "@types/vscode": "^1.87.0",
@@ -66,6 +69,7 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "fuzzysort": "^2.0.4"
+        "fuzzysort": "^2.0.4",
+        "markdown-it-container": "^4.0.0"
     }
 }
